@@ -1,0 +1,37 @@
+// Get elements
+const prevBtn = document.querySelector('.prev-btn');
+const nextBtn = document.querySelector('.next-btn');
+const featuresGrid = document.querySelector('.features-grid');
+
+// Initial state
+let currentIndex = 0;
+const totalFeatures = document.querySelectorAll('.feature-card').length;
+
+// Show the features corresponding to the current index
+function updateCarousel() {
+  const offset = -(currentIndex * 330); // 330px is the card width + gap
+  featuresGrid.style.transform = `translateX(${offset}px)`;
+}
+
+// Next button functionality
+nextBtn.addEventListener('click', () => {
+  if (currentIndex < totalFeatures - 3) { // 3 items shown at once
+    currentIndex++;
+  } else {
+    currentIndex = 0; // Loop back to the first card
+  }
+  updateCarousel();
+});
+
+// Previous button functionality
+prevBtn.addEventListener('click', () => {
+  if (currentIndex > 0) {
+    currentIndex--;
+  } else {
+    currentIndex = totalFeatures - 3; // Loop back to the last card
+  }
+  updateCarousel();
+});
+
+// Initial update
+updateCarousel();

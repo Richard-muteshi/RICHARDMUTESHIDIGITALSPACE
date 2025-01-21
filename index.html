@@ -1,0 +1,239 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Richard Muteshi Digital Space</title>
+    <link rel="stylesheet" href="styles.css">
+    <script src="https://kit.fontawesome.com/a076d05399.js" crossorigin="anonymous"></script>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            line-height: 1.6;
+            margin: 0;
+            padding: 0;
+            background-color: #f0f8ff; /* Light blue background */
+            color: #333;
+        }
+
+        header {
+            background: #004080; /* Navy blue */
+            color: white;
+            padding: 1rem 0;
+            text-align: center;
+        }
+
+        header h1 {
+            margin: 0;
+        }
+
+        nav ul {
+            list-style: none;
+            padding: 0;
+        }
+
+        nav ul li {
+            display: inline;
+            margin: 0 10px;
+        }
+
+        nav ul li a {
+            color: white;
+            text-decoration: none;
+        }
+
+        main {
+            padding: 1rem;
+        }
+
+        section {
+            margin-bottom: 2rem;
+        }
+
+        h2 {
+            color: #004080;
+        }
+
+        #materials-list {
+            background-color: #e6f7ff; /* Lighter blue */
+            padding: 1rem;
+            border-radius: 5px;
+        }
+
+        .material-item {
+            background: white;
+            padding: 1rem;
+            margin-bottom: 1rem;
+            border: 1px solid #ccc;
+            border-radius: 5px;
+        }
+
+        button {
+            background-color: #004080;
+            color: white;
+            border: none;
+            padding: 0.5rem 1rem;
+            cursor: pointer;
+            border-radius: 5px;
+        }
+
+        button:hover {
+            background-color: #003060;
+        }
+
+        footer {
+            text-align: center;
+            background: #004080;
+            color: white;
+            padding: 1rem 0;
+            position: relative;
+        }
+    </style>
+</head>
+<body>
+    <header>
+        <div class="header-container">
+            <h1>Richard Muteshi's Digital Space</h1>
+            <p>Your one-stop platform for Junior Secondary educational materials</p>
+            <nav>
+                <ul class="nav-links">
+                    <li><a href="#upload-section">Upload</a></li>
+                    <li><a href="#materials-list">Materials</a></li>
+                    <li><a href="#login-section">Login</a></li>
+                </ul>
+            </nav>
+        </div>
+    </header>
+
+    <main>
+        <!-- User Authentication Section -->
+        <section id="login-section">
+            <h2>User Login</h2>
+            <form id="login-form">
+                <label for="username">Username:</label>
+                <input type="text" id="username" name="username" required>
+
+                <label for="password">Password:</label>
+                <input type="password" id="password" name="password" required>
+
+                <button type="submit">Login</button>
+                <p>Don't have an account? <a href="#" id="signup-link">Sign Up</a></p>
+            </form>
+        </section>
+
+        <!-- Upload Materials Section -->
+        <section id="upload-section">
+            <h2>Upload Educational Materials</h2>
+            <form id="upload-form">
+                <label for="material-title">Material Title:</label>
+                <input type="text" id="material-title" name="material-title" required>
+
+                <label for="material-grade">Grade:</label>
+                <select id="material-grade" name="material-grade" required>
+                    <option value="">Select Grade</option>
+                    <option value="Grade 7">Grade 7</option>
+                    <option value="Grade 8">Grade 8</option>
+                    <option value="Grade 9">Grade 9</option>
+                </select>
+
+                <label for="material-category">Category:</label>
+                <select id="material-category" name="material-category" required>
+                    <option value="">Select Category</option>
+                    <option value="Science">Science</option>
+                    <option value="Math">Math</option>
+                    <option value="English">English</option>
+                    <option value="History">History</option>
+                </select>
+
+                <label for="material-description">Description:</label>
+                <textarea id="material-description" name="material-description" rows="4" required></textarea>
+
+                <label for="material-file">Upload File:</label>
+                <input type="file" id="material-file" name="material-file" accept=".pdf, .docx, .pptx" required>
+
+                <button type="submit">Upload</button>
+            </form>
+        </section>
+
+        <!-- Materials List Section -->
+        <section id="materials-list">
+            <h2>Available Materials</h2>
+            <div id="search-bar">
+                <label for="filter-grade">Filter by Grade:</label>
+                <select id="filter-grade">
+                    <option value="">All Grades</option>
+                    <option value="Grade 7">Grade 7</option>
+                    <option value="Grade 8">Grade 8</option>
+                    <option value="Grade 9">Grade 9</option>
+                </select>
+
+                <label for="search-input">Search:</label>
+                <input type="text" id="search-input" placeholder="Search materials...">
+                <button id="search-button">Search</button>
+            </div>
+            <div id="materials-container">
+                <!-- Uploaded materials will be dynamically inserted here -->
+            </div>
+        </section>
+    </main>
+
+    <footer>
+        <p>&copy; 2025 Richard Muteshi | Digital Space for Education</p>
+    </footer>
+
+    <script>
+        document.addEventListener("DOMContentLoaded", () => {
+            const filterGrade = document.getElementById("filter-grade");
+            const searchInput = document.getElementById("search-input");
+            const searchButton = document.getElementById("search-button");
+            const materialsContainer = document.getElementById("materials-container");
+
+            const materials = [
+                { title: "Grade 7 Science Guide", grade: "Grade 7", category: "Science", description: "An in-depth guide to science topics for Grade 7." },
+                { title: "Grade 8 Math Workbook", grade: "Grade 8", category: "Math", description: "Practice problems and solutions for Grade 8 Mathematics." },
+                { title: "Grade 9 History Overview", grade: "Grade 9", category: "History", description: "A comprehensive history overview for Grade 9 students." }
+            ];
+
+            const renderMaterials = (filter = {}) => {
+                materialsContainer.innerHTML = "";
+                const filteredMaterials = materials.filter(material => {
+                    const matchesGrade = filter.grade ? material.grade === filter.grade : true;
+                    const matchesSearch = filter.search ? material.title.toLowerCase().includes(filter.search.toLowerCase()) : true;
+                    return matchesGrade && matchesSearch;
+                });
+
+                if (filteredMaterials.length === 0) {
+                    materialsContainer.innerHTML = "<p>No materials found.</p>";
+                    return;
+                }
+
+                filteredMaterials.forEach(material => {
+                    const materialDiv = document.createElement("div");
+                    materialDiv.className = "material-item";
+                    materialDiv.innerHTML = `
+                        <h3>${material.title}</h3>
+                        <p><strong>Grade:</strong> ${material.grade}</p>
+                        <p><strong>Category:</strong> ${material.category}</p>
+                        <p>${material.description}</p>
+                    `;
+                    materialsContainer.appendChild(materialDiv);
+                });
+            };
+
+            searchButton.addEventListener("click", () => {
+                const grade = filterGrade.value;
+                const search = searchInput.value;
+                renderMaterials({ grade, search });
+            });
+
+            filterGrade.addEventListener("change", () => {
+                const grade = filterGrade.value;
+                const search = searchInput.value;
+                renderMaterials({ grade, search });
+            });
+
+            renderMaterials();
+        });
+    </script>
+</body>
+</html>
